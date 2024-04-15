@@ -36,10 +36,3 @@ To run the app locally, follow these steps:
 - Generate new passwords for new accounts.
 - Use the app securely to manage your passwords.
 
-## Contributing
-
-Contributions are welcome! Feel free to fork the repository and submit pull requests for new features, improvements, or bug fixes.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
