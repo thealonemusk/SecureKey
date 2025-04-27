@@ -26,7 +26,7 @@ export const AddPasswordButton: React.FC = () => {
   };
 
   const handleImportComplete = (data: any[]) => {
-    // 遍历导入的数据数组，逐个添加密码
+    // Traverse the imported data array and add passwords one by one
     data.forEach(item => {
       addPassword(item);
     });

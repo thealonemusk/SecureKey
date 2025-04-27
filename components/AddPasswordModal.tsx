@@ -65,7 +65,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
       });
       handleDismiss();
     } catch (error) {
-      console.error('保存密码失败:', error);
+      console.error('Failed to save password:', error);
     } finally {
       setIsSubmitting(false);
     }
@@ -78,11 +78,11 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
         onDismiss={handleDismiss}
         contentContainerStyle={styles.modalContainer}
       >
-        <Title style={styles.title}>添加新密码</Title>
+        <Title style={styles.title}>Add new password</Title>
         
         <ScrollView style={styles.scrollView}>
           <TextInput
-            label="名称 *"
+            label="Name *"
             value={name}
             onChangeText={setName}
             mode="outlined"
@@ -91,7 +91,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
           />
           {errors.name && (
             <HelperText type="error">
-              请输入密码名称
+             Please enter password name
             </HelperText>
           )}
           
@@ -105,12 +105,12 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
           />
           {errors.username && (
             <HelperText type="error">
-              请输入账号
+              Please enter account number
             </HelperText>
           )}
           
           <TextInput
-            label="密码 *"
+            label="Password *"
             value={password}
             onChangeText={setPassword}
             mode="outlined"
@@ -120,12 +120,12 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
           />
           {errors.password && (
             <HelperText type="error">
-              请输入密码
+              Please enter password
             </HelperText>
           )}
           
           <TextInput
-            label="邮箱"
+            label="Email"
             value={email}
             onChangeText={setEmail}
             mode="outlined"
@@ -134,7 +134,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
           />
           
           <TextInput
-            label="备注"
+            label="Note"
             value={note}
             onChangeText={setNote}
             mode="outlined"
@@ -151,7 +151,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
             style={styles.button}
             disabled={isSubmitting}
           >
-            取消
+            Cancel
           </Button>
           <Button
             mode="contained"
@@ -160,7 +160,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
             loading={isSubmitting}
             disabled={isSubmitting}
           >
-            保存
+            Save
           </Button>
         </View>
       </Modal>
