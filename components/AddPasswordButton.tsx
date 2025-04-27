@@ -7,7 +7,17 @@ import { ExportPasswordsModal } from './ExportPasswordsModal';
 import { AddPasswordModal } from './AddPasswordModal';
 import { usePasswordContext } from '../contexts/PasswordContext';
 
-export const AddPasswordButton: React.FC = () => {
+interface AddPasswordButtonProps {
+  onImportPress: () => void;
+  onExportPress: () => void;
+  onAddPress: () => void;
+}
+
+export const AddPasswordButton: React.FC<AddPasswordButtonProps> = ({
+  onImportPress,
+  onExportPress,
+  onAddPress
+}) => {
   const { passwords, addPassword } = usePasswordContext();
   const [importModalVisible, setImportModalVisible] = useState(false);
   const [exportModalVisible, setExportModalVisible] = useState(false);
@@ -37,7 +47,7 @@ export const AddPasswordButton: React.FC = () => {
       <View style={styles.buttonGroup}>
         <TouchableOpacity
           style={[styles.button, styles.importButton]}
-          onPress={handleImportPress}
+          onPress={onImportPress}
         >
           <Ionicons name="download-outline" size={24} color="white" />
           <ThemedText style={styles.buttonText}>导入</ThemedText>
@@ -45,7 +55,7 @@ export const AddPasswordButton: React.FC = () => {
 
         <TouchableOpacity
           style={[styles.button, styles.exportButton]}
-          onPress={handleExportPress}
+          onPress={onExportPress}
         >
           <Ionicons name="share-outline" size={24} color="white" />
           <ThemedText style={styles.buttonText}>导出</ThemedText>
@@ -53,7 +63,7 @@ export const AddPasswordButton: React.FC = () => {
 
         <TouchableOpacity
           style={[styles.button, styles.addButton]}
-          onPress={handleAddPress}
+          onPress={onAddPress}
         >
           <Ionicons name="add" size={24} color="white" />
           <ThemedText style={styles.buttonText}>添加</ThemedText>

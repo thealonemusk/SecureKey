@@ -30,7 +30,7 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
     if (!password) return;
     
     if (!name.trim() || !username.trim() || !passwordValue.trim()) {
-      Alert.alert('错误', '名称、账号和密码不能为空');
+      Alert.alert('Error', 'Name, account and password cannot be empty');
       return;
     }
 
@@ -44,9 +44,9 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
       });
       onUpdate();
       onClose();
-      Alert.alert('成功', '密码已更新');
+      Alert.alert('Successful', 'Password updated');
     } catch (error) {
-      Alert.alert('错误', '更新密码失败');
+      Alert.alert('Error', 'Password update failed');    
     }
   };
 
@@ -59,16 +59,16 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>编辑密码</Text>
+          <Text style={styles.modalTitle}>Edit Password</Text>
           
           <ScrollView style={styles.scrollView}>
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>名称 *</Text>
+              <Text style={styles.label}>Name *</Text>
               <TextInput
                 style={styles.input}
                 value={name}
                 onChangeText={setName}
-                placeholder="请输入名称"
+                placeholder="Please enter a Name"
               />
             </View>
             
@@ -78,7 +78,7 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
                 style={styles.input}
                 value={username}
                 onChangeText={setUsername}
-                placeholder="请输入账号"
+                placeholder="Please enter your account number"
               />
             </View>
             
@@ -88,28 +88,28 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
                 style={styles.input}
                 value={passwordValue}
                 onChangeText={setPasswordValue}
-                placeholder="请输入密码"
+                placeholder="Please enter your password"
               />
             </View>
             
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>邮箱</Text>
+              <Text style={styles.label}>EMail</Text>
               <TextInput
                 style={styles.input}
                 value={email}
                 onChangeText={setEmail}
-                placeholder="请输入邮箱"
+                placeholder="Please enter your email address"
                 keyboardType="email-address"
               />
             </View>
             
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>备注</Text>
+              <Text style={styles.label}>Remark</Text>
               <TextInput
                 style={[styles.input, styles.multilineInput]}
                 value={note}
                 onChangeText={setNote}
-                placeholder="请输入备注"
+                placeholder="Please enter a note"
                 multiline
                 numberOfLines={3}
                 textAlignVertical="top"
@@ -122,14 +122,14 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
               style={[styles.button, styles.buttonCancel]}
               onPress={onClose}
             >
-              <Text style={styles.buttonText}>取消</Text>
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             
             <TouchableOpacity
               style={[styles.button, styles.buttonUpdate]}
               onPress={handleUpdate}
             >
-              <Text style={styles.buttonText}>更新</Text>
+              <Text style={styles.buttonText}>renew</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -30,7 +30,7 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
 
   const verifyPassword = async () => {
     if (!password.trim()) {
-      setError('请输入访问密码');
+      setError('Please enter the access password');
       return;
     }
 
@@ -43,11 +43,11 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
         setError('');
         exportPasswords();
       } else {
-        setError('密码错误');
+        setError('Error password');
       }
     } catch (error) {
-      console.error('密码验证失败:', error);
-      setError('验证失败，请重试');
+      console.error('Password verification failed:', error);
+      setError('Verification failed, please try again');
     }
   };
 
@@ -55,60 +55,58 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
     setIsExporting(true);
 
     try {
-      // 如果是 Android，检查权限
+      // Android
       if (Platform.OS === 'android') {
         const permission = await PermissionsAndroid.request(
           PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           {
-            title: '存储权限',
-            message: '导出密码需要访问您的文件存储',
-            buttonNeutral: '稍后询问',
-            buttonNegative: '取消',
-            buttonPositive: '确认',
+            title: 'Storage permissions required',
+            message: 'Exporting passwords requires access to your file storage',
+            buttonNeutral: 'Ask me later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
           }
         );
-        
+
         if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('权限被拒绝', '无法导出密码，因为应用没有访问存储的权限');
+          Alert('Permission denied', 'Cannot export password because the app does not have permission to access the storage');
           setIsExporting(false);
           return;
         }
       }
 
-      // 将密码数据转换为 CSV 格式
-      let csvContent = '名称,账号,密码,邮箱,备注\n';
+      //  CSV 
+      let csvContent = 'name, account, password, email, note\n';
+
       passwords.forEach(pwd => {
-        // 处理字段中的逗号和换行符，确保 CSV 格式正确
         const escapedName = pwd.name ? `"${pwd.name.replace(/"/g, '""')}"` : '';
         const escapedUsername = pwd.username ? `"${pwd.username.replace(/"/g, '""')}"` : '';
         const escapedPassword = pwd.password ? `"${pwd.password.replace(/"/g, '""')}"` : '';
         const escapedEmail = pwd.email ? `"${pwd.email.replace(/"/g, '""')}"` : '';
         const escapedNote = pwd.note ? `"${pwd.note.replace(/"/g, '""')}"` : '';
-        
+
         csvContent += `${escapedName},${escapedUsername},${escapedPassword},${escapedEmail},${escapedNote}\n`;
       });
 
-      // 生成当前时间戳作为文件名的一部分
       const timestamp = new Date().getTime();
-      const fileName = `密码备份_${timestamp}.csv`;
-      
-      // 使用 Expo FileSystem 保存文件
+      const fileName = `Password backup${timestamp}.csv`;
+
+      //  Expo FileSystem 
       const fileUri = `${FileSystem.documentDirectory}${fileName}`;
       await FileSystem.writeAsStringAsync(fileUri, csvContent, { encoding: FileSystem.EncodingType.UTF8 });
-      
-      // 检查文件是否可以分享
+
       const isAvailable = await Sharing.isAvailableAsync();
-      
+
       if (isAvailable) {
-        // 使用 Expo Sharing 分享文件
+        //Expo Sharing
         await Sharing.shareAsync(fileUri);
-        Alert.alert('导出成功', `密码已导出到文件: ${fileName}`);
+        Alert.alert('Exported successfully', `Password has been exported to file: ${fileName}`);
       } else {
-        Alert.alert('错误', '在此设备上不支持文件分享');
+        Alert.alert('Error', 'File sharing is not supported on this device');
       }
     } catch (error) {
-      console.error('导出密码失败:', error);
-      Alert.alert('导出失败', '导出密码时出现错误，请重试');
+      console.error('Export password failed:', error);
+      Alert.alert('Export failed', 'An error occurred while exporting the password, please try again');
     } finally {
       setIsExporting(false);
       handleClose();
@@ -131,11 +129,11 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
             </View>
           ) : !isPasswordVerified ? (
             <>
-              <Text style={styles.title}>导出密码</Text>
+              <Text style={styles.title}>Export password</Text>
               <Text style={styles.subtitle}>
-                请输入访问密码以导出您的所有密码数据到CSV文件
+                Please enter the access password to export all your password data to the CSV file
               </Text>
-              
+
               <TextInput
                 style={styles.input}
                 value={password}
@@ -143,14 +141,14 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
                   setPassword(text);
                   setError('');
                 }}
-                placeholder="请输入访问密码"
+                placeholder="Please enter access password"
                 placeholderTextColor="#999"
                 secureTextEntry
                 autoFocus
               />
-              
+
               {error ? <Text style={styles.errorText}>{error}</Text> : null}
-              
+
               <View style={styles.buttonContainer}>
                 <TouchableOpacity
                   style={[styles.button, styles.cancelButton]}
@@ -158,7 +156,7 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
                 >
                   <Text style={styles.buttonText}>取消</Text>
                 </TouchableOpacity>
-                
+
                 <TouchableOpacity
                   style={[styles.button, styles.exportButton]}
                   onPress={verifyPassword}
@@ -166,12 +164,12 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
                   <Text style={styles.buttonText}>导出</Text>
                 </TouchableOpacity>
               </View>
-              
+
               <Text style={styles.exportNote}>
-                导出的文件将保存为CSV格式，可用Excel等软件打开
+                The exported file will be saved in CSV format and can be opened by Excel and other software.
               </Text>
             </>
-          ) : null }
+          ) : null}
         </View>
       </View>
     </Modal>

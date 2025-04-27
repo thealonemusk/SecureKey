@@ -21,7 +21,7 @@ export function SearchBar() {
 
   const SearchContainer = Platform.OS === 'ios' ? BlurView : View;
   const blurProps = Platform.OS === 'ios' ? {
-    blurType: 'light',
+    blurType: 'light' as const,
     blurAmount: 10,
   } : {};
 
@@ -34,7 +34,7 @@ export function SearchBar() {
             style={styles.input}
             value={searchText}
             onChangeText={setSearchText}
-            placeholder="搜索名称..."
+            placeholder="Search for name..."
             placeholderTextColor="rgba(0,0,0,0.4)"
             returnKeyType="search"
             onSubmitEditing={handleSearch}

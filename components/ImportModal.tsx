@@ -33,9 +33,9 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
     const errors = [];
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
-      if (!row.title) errors.push(`行 ${i + 1}: 标题为必填项`);
-      if (!row.username) errors.push(`行 ${i + 1}: 用户名为必填项`);
-      if (!row.password) errors.push(`行 ${i + 1}: 密码为必填项`);
+      if (!row.title) errors.push(`line ${i + 1}: Title is required`);
+      if (!row.username) errors.push(`line ${i + 1}: Username is required`);
+      if (!row.password) errors.push(`line ${i + 1}: Password is required`);
     }
     return errors;
   };
@@ -50,7 +50,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
         const file = result.assets[0];
         const response = await fetch(file.uri);
         const text = await response.text();
-        
+
         Papa.parse(text, {
           header: true,
           complete: (results) => {
@@ -64,15 +64,15 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
             }
           },
           error: (error: ParseError) => {
-            setError('CSV解析错误：' + error.message);
+            setError('CSV parsing error:' + error.message);
           }
         });
       }
     } catch (err) {
       if (err instanceof Error) {
-        setError('文件选择错误：' + err.message);
+        setError('File selection error:' + err.message);
       } else {
-        setError('文件选择时发生未知错误');
+        setError('Unknown error occurred while selecting file');
       }
     }
   };
@@ -87,7 +87,6 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
               <Ionicons name="close" size={24} color="#666" />
             </TouchableOpacity>
           </View>
-          
           <TouchableOpacity style={styles.button} onPress={handleFilePick}>
             <Ionicons name="document-outline" size={20} color="#fff" style={styles.buttonIcon} />
             <ThemedText style={styles.buttonText}>选择CSV文件</ThemedText>
@@ -108,9 +107,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
                   </View>
                 ))}
               </View>
-              
               <View style={styles.buttonContainer}>
-                <TouchableOpacity 
+                <TouchableOpacity
                   style={[styles.button, styles.confirmButton]}
                   onPress={() => {
                     onImport(previewData);
@@ -119,8 +117,8 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
                   <Ionicons name="checkmark" size={20} color="#fff" style={styles.buttonIcon} />
                   <ThemedText style={styles.buttonText}>确认导入</ThemedText>
                 </TouchableOpacity>
-                
-                <TouchableOpacity 
+
+                <TouchableOpacity
                   style={[styles.button, styles.cancelButton]}
                   onPress={onClose}>
                   <Ionicons name="close" size={20} color="#fff" style={styles.buttonIcon} />

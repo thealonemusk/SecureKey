@@ -27,22 +27,22 @@ export function PasswordList() {
 
   const handleDelete = (password: Password) => {
     Alert.alert(
-      '确认删除',
-      `确定要删除"${password.name}"吗？`,
+      'Confirm Delete',
+      `Are you sure you want to delete "${password.name}"? `,
       [
         {
-          text: '取消',
+          text: 'Cancel',
           style: 'cancel'
         },
         {
-          text: '删除',
+          text: 'Delete',
           style: 'destructive',
           onPress: async () => {
             try {
               await deletePassword(password.id);
-              Alert.alert('成功', '密码已删除');
+              Alert.alert('Successful', 'Password deleted');
             } catch (error) {
-              Alert.alert('错误', '删除密码失败');
+              Alert.alert('Error', 'Password Delete Failed');
             }
           }
         }
@@ -52,25 +52,25 @@ export function PasswordList() {
 
   const handleLongPress = (password: Password) => {
     Alert.alert(
-      '复制选项',
-      `选择要复制的内容：${password.name}`,
+      'Copy Options',
+      `Select the content to copy: ${password.name}`,
       [
         {
-          text: '复制账号',
+          text: 'Copy account',
           onPress: async () => {
             await Clipboard.setString(password.username);
-            Alert.alert('成功', '账号已复制到剪贴板');
+            Alert.alert('Success', 'Account has been copied to clipboard');
           }
         },
         {
-          text: '复制密码',
+          text: 'Copy password',
           onPress: async () => {
             await Clipboard.setString(password.password);
-            Alert.alert('成功', '密码已复制到剪贴板');
+            Alert.alert('Success', 'Password copied to clipboard');
           }
         },
         {
-          text: '取消',
+          text: 'Cancel',
           style: 'cancel'
         }
       ]
@@ -85,47 +85,46 @@ export function PasswordList() {
     >
       <View style={styles.contentContainer}>
         <Text style={styles.name}>{item.name}</Text>
-        
+
         <View style={styles.detailsContainer}>
           <View style={styles.detailRow}>
-            <Text style={styles.label}>账号:</Text>
+            <Text style={styles.label}>account:</Text>
             <Text style={styles.value}>{item.username}</Text>
           </View>
-          
+
           <View style={styles.detailRow}>
-            <Text style={styles.label}>密码:</Text>
+            <Text style={styles.label}>password:</Text>
             <Text style={styles.value}>{item.password}</Text>
           </View>
-          
           {item.email ? (
             <View style={styles.detailRow}>
-              <Text style={styles.label}>邮箱:</Text>
+              <Text style={styles.label}>email:</Text>
               <Text style={styles.value}>{item.email}</Text>
             </View>
           ) : null}
-          
+
           {item.note ? (
             <View style={styles.detailRow}>
-              <Text style={styles.label}>备注:</Text>
+              <Text style={styles.label}>Remark:</Text>
               <Text style={styles.value} numberOfLines={2}>{item.note}</Text>
             </View>
           ) : null}
         </View>
       </View>
-      
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={[styles.button, styles.editButton]}
           onPress={() => handleEdit(item)}
         >
-          <Text style={styles.buttonText}>编辑</Text>
+          <Text style={styles.buttonText}>edit</Text>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={[styles.button, styles.deleteButton]}
           onPress={() => handleDelete(item)}
         >
-          <Text style={styles.buttonText}>删除</Text>
+          <Text style={styles.buttonText}>delete</Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -133,7 +132,7 @@ export function PasswordList() {
 
   const renderEmptyComponent = () => (
     <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>暂无密码记录</Text>
+      <Text style={styles.emptyText}>No password record yet</Text>
     </View>
   );
 
@@ -156,12 +155,12 @@ export function PasswordList() {
         refreshing={isLoading}
         ListEmptyComponent={renderEmptyComponent}
         contentContainerStyle={styles.listContent}
-      />            
-      <AddPasswordButton 
+      />
+      <AddPasswordButton
         onImportPress={() => setIsImportModalVisible(true)}
         onExportPress={() => setIsExportModalVisible(true)}
         onAddPress={() => setIsAddModalVisible(true)}
-      />     
+      />
       <EditPasswordModal
         visible={isEditModalVisible}
         password={selectedPassword}
@@ -186,10 +185,10 @@ export function PasswordList() {
                 url: item.url || ''
               });
             }
-            Alert.alert('成功', '密码导入成功');
+            Alert.alert('Successful', 'Password import successfully');
             refreshPasswords();
           } catch (error) {
-            Alert.alert('错误', '导入密码时发生错误');
+            Alert.alert('Error', 'Error occurred while importing password');
           }
         }}
       />
@@ -198,14 +197,13 @@ export function PasswordList() {
         onClose={() => setIsExportModalVisible(false)}
         passwords={filteredPasswords}
       />
-      <AddPasswordModal 
+      <AddPasswordModal
         visible={isAddModalVisible}
         onDismiss={() => setIsAddModalVisible(false)}
       />
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

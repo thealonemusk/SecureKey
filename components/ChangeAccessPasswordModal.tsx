@@ -16,7 +16,7 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
 
   const validateOldPassword = async () => {
     if (!oldPassword.trim()) {
-      setError('请输入当前密码');
+      setError('Please enter the current password');
       return;
     }
 
@@ -28,38 +28,38 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
         setIsOldPasswordValid(true);
         setError('');
       } else {
-        setError('当前密码错误');
+        setError('Incorrect current password');
       }
     } catch (error) {
-      console.error('密码验证失败:', error);
-      setError('验证失败，请重试');
+      console.error('Password verification failed:', error);
+      setError('Verification failed, please try again');
     }
   };
 
   const handleSave = async () => {
     if (!isOldPasswordValid) {
-      setError('请先验证当前密码');
+      setError('Please verify the current password first');
       return;
     }
 
     if (!newPassword.trim()) {
-      setError('请输入新密码');
+      setError('Please enter a new password');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('两次输入的密码不一致');
+      setError('The passwords entered twice are inconsistent');
       return;
     }
 
     try {
       await AsyncStorage.setItem('accessPassword', newPassword);
-      Alert.alert('成功', '访问密码已更新');
+      Alert.alert('Sucess', ' Access password has been updated successfully');
       resetForm();
       onClose();
     } catch (error) {
-      console.error('保存密码失败:', error);
-      setError('保存失败，请重试');
+      console.error('Saving password Failed:', error);
+      setError('Saving failed, please try again');
     }
   };
 
@@ -85,11 +85,11 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.title}>修改访问密码</Text>
+          <Text style={styles.title}>Modify the access password</Text>
           
           {!isOldPasswordValid ? (
             <>
-              <Text style={styles.label}>当前密码</Text>
+              <Text style={styles.label}>Current Password</Text>
               <TextInput
                 style={styles.input}
                 value={oldPassword}
@@ -97,7 +97,7 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
                   setOldPassword(text);
                   setError('');
                 }}
-                placeholder="请输入当前密码"
+                placeholder="Please enter the current password"
                 secureTextEntry
                 autoFocus
               />
@@ -105,12 +105,12 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
                 style={styles.validateButton}
                 onPress={validateOldPassword}
               >
-                <Text style={styles.buttonText}>验证当前密码</Text>
+                <Text style={styles.buttonText}>Verify the current password</Text>
               </TouchableOpacity>
             </>
           ) : (
             <>
-              <Text style={styles.label}>新密码</Text>
+              <Text style={styles.label}>New Password</Text>
               <TextInput
                 style={styles.input}
                 value={newPassword}
@@ -118,12 +118,12 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
                   setNewPassword(text);
                   setError('');
                 }}
-                placeholder="请输入新密码"
+                placeholder="Please enter a new password"
                 secureTextEntry
                 autoFocus
               />
               
-              <Text style={styles.label}>确认密码</Text>
+              <Text style={styles.label}>Confirm Password</Text>
               <TextInput
                 style={styles.input}
                 value={confirmPassword}
@@ -131,7 +131,7 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
                   setConfirmPassword(text);
                   setError('');
                 }}
-                placeholder="请确认新密码"
+                placeholder="Please confirm the new password"
                 secureTextEntry
               />
             </>
@@ -144,7 +144,7 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
               style={[styles.button, styles.cancelButton]}
               onPress={handleClose}
             >
-              <Text style={styles.buttonText}>取消</Text>
+              <Text style={styles.buttonText}>Cancel</Text>
             </TouchableOpacity>
             
             {isOldPasswordValid && (
@@ -152,7 +152,7 @@ export function ChangeAccessPasswordModal({ visible, onClose }: ChangeAccessPass
                 style={[styles.button, styles.saveButton]}
                 onPress={handleSave}
               >
-                <Text style={styles.buttonText}>保存</Text>
+                <Text style={styles.buttonText}>Keep</Text>
               </TouchableOpacity>
             )}
           </View>
