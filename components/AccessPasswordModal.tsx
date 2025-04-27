@@ -14,7 +14,7 @@ export function AccessPasswordModal({ visible, onSuccess, isFirstTime = false }:
 
   const handleSubmit = async () => {
     if (!password.trim()) {
-      setError('请输入密码');
+      setError('Please Enter Password');
       return;
     }
 
@@ -23,21 +23,21 @@ export function AccessPasswordModal({ visible, onSuccess, isFirstTime = false }:
       const defaultPassword = 'admin';
 
       if (isFirstTime) {
-        // 首次设置密码
+        // Set password for the first time
         await AsyncStorage.setItem('accessPassword', password);
         onSuccess();
       } else {
-        // 验证密码
+        // Verify password
         if (password === (storedPassword || defaultPassword)) {
           onSuccess();
           setPassword('');
         } else {
-          setError('密码错误');
+          setError('Wrong Password');
         }
       }
     } catch (error) {
-      console.error('密码验证失败:', error);
-      setError('验证失败，请重试');
+      console.error('Password verification failed:', error);
+      setError('Verification failed, please try again');    
     }
   };
 
@@ -51,13 +51,13 @@ export function AccessPasswordModal({ visible, onSuccess, isFirstTime = false }:
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>
-            {isFirstTime ? '设置访问密码' : '请输入访问密码'}
+            {isFirstTime ? 'Set access password' : 'Please enter the access password'}
           </Text>
           
           <Text style={styles.subtitle}>
             {isFirstTime 
-              ? '请设置一个用于保护您密码的访问密码' 
-              : '输入正确密码后才能查看您的密码库'}
+            ? 'Please set an access password to protect your password' 
+            : 'You can view your password vault only after entering the correct password'}
           </Text>
           
           <TextInput
@@ -67,7 +67,7 @@ export function AccessPasswordModal({ visible, onSuccess, isFirstTime = false }:
               setPassword(text);
               setError('');
             }}
-            placeholder="请输入密码"
+            placeholder="Please enter your password"
             placeholderTextColor="#999"
             secureTextEntry
             autoFocus
@@ -80,13 +80,13 @@ export function AccessPasswordModal({ visible, onSuccess, isFirstTime = false }:
             onPress={handleSubmit}
           >
             <Text style={styles.buttonText}>
-              {isFirstTime ? '设置密码' : '确认'}
+            {isFirstTime ? 'Set password' : 'Confirm'}            
             </Text>
           </TouchableOpacity>
           
           {!isFirstTime && (
             <Text style={styles.hint}>
-              默认密码: admin
+              Default password: admin
             </Text>
           )}
         </View>
