@@ -7,6 +7,7 @@ interface Password {
   password: string;
   email: string;
   note: string;
+  url: string;
   createdAt: string;
 }
 
@@ -40,6 +41,7 @@ class DatabaseService {
           password TEXT NOT NULL,
           email TEXT,
           note TEXT,
+          url TEXT,
           createdAt TEXT NOT NULL
         );
       `);
@@ -62,9 +64,9 @@ class DatabaseService {
 
     try {
       const result = await db.runAsync(
-        `INSERT INTO passwords (name, username, password, email, note, createdAt) 
-         VALUES (?, ?, ?, ?, ?, ?)`,
-        [password.name, password.username, password.password, password.email || '', password.note || '', createdAt]
+        `INSERT INTO passwords (name, username, password, email, note, url, createdAt) 
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [password.name, password.username, password.password, password.email || '', password.note || '', password.url || '', createdAt]
       );
       return result.lastInsertRowId;
     } catch (error) {
@@ -120,9 +122,9 @@ class DatabaseService {
     try {
       await db.runAsync(
         `UPDATE passwords 
-         SET name = ?, username = ?, password = ?, email = ?, note = ?
+         SET name = ?, username = ?, password = ?, email = ?, note = ?, url = ?
          WHERE id = ?`,
-        [password.name, password.username, password.password, password.email || '', password.note || '', id]
+        [password.name, password.username, password.password, password.email || '', password.note || '', password.url || '', id]
       );
     } catch (error) {
       console.error('Password update failed:', error);

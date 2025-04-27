@@ -15,6 +15,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
+  const [url, setUrl] = useState('');
   const [errors, setErrors] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -24,6 +25,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
     setPassword('');
     setEmail('');
     setNote('');
+    setUrl('');
     setErrors({});
   };
 
@@ -62,6 +64,7 @@ export const AddPasswordModal: React.FC<AddPasswordModalProps> = ({ visible, onD
         password,
         email,
         note,
+        url
       });
       handleDismiss();
     } catch (error) {

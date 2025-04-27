@@ -15,6 +15,7 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
   const [passwordValue, setPasswordValue] = useState('');
   const [email, setEmail] = useState('');
   const [note, setNote] = useState('');
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
     if (password) {
@@ -23,6 +24,7 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
       setPasswordValue(password.password);
       setEmail(password.email);
       setNote(password.note);
+      setUrl(password.url);
     }
   }, [password]);
 
@@ -40,7 +42,8 @@ export function EditPasswordModal({ visible, password, onClose, onUpdate }: Edit
         username,
         password: passwordValue,
         email,
-        note
+        note,
+        url
       });
       onUpdate();
       onClose();

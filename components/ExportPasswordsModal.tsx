@@ -69,7 +69,7 @@ export function ExportPasswordsModal({ visible, onClose, passwords }: ExportPass
         );
 
         if (permission !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert('Permission denied', 'Cannot export password because the app does not have permission to access the storage');
+          Alert.alert('Permission denied', 'Cannot export password because the app does not have permission to access the storage');
           setIsExporting(false);
           return;
         }
