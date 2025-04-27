@@ -53,7 +53,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isVisible, onClose, on
 
         Papa.parse(text, {
           header: true,
-          complete: (results) => {
+          complete: (results: Papa.ParseResult<PreviewData>) => {
             const errors = validateData(results.data);
             if (errors.length > 0) {
               setError(errors.join('\n'));
