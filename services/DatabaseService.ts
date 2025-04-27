@@ -1,4 +1,6 @@
 import * as SQLite from 'expo-sqlite';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 interface Password {
   id: number;
@@ -14,12 +16,19 @@ interface Password {
 class DatabaseService {
   private db: SQLite.SQLiteDatabase | null = null;
   private dbInitPromise: Promise<void>;
+  private isWeb: boolean;
 
   constructor() {
+    this.isWeb = Platform.OS === 'web';
     this.dbInitPromise = this.initialize();
   }
 
   private async initialize() {
+    if (this.isWeb) {
+      // For web, we'll use AsyncStorage
+      return;
+    }
+    
     try {
       this.db = await SQLite.openDatabaseAsync('myapp.db');
       await this.initDatabase();
@@ -29,7 +38,7 @@ class DatabaseService {
   }
 
   private async initDatabase() {
-    if (!this.db) return;
+    if (this.isWeb || !this.db) return;
     
     try {
       // execAsync SQL
@@ -51,6 +60,10 @@ class DatabaseService {
   }
 
   private async ensureDb() {
+    if (this.isWeb) {
+      return null;
+    }
+    
     await this.dbInitPromise;
     if (!this.db) {
       throw new Error('The database is not initialized');
@@ -58,8 +71,41 @@ class DatabaseService {
     return this.db;
   }
 
+  // Web storage helpers
+  private async getWebPasswords(): Promise<Password[]> {
+    try {
+      const passwordsJson = await AsyncStorage.getItem('passwords');
+      return passwordsJson ? JSON.parse(passwordsJson) : [];
+    } catch (error) {
+      console.error('Failed to get passwords from AsyncStorage:', error);
+      return [];
+    }
+  }
+
+  private async saveWebPasswords(passwords: Password[]): Promise<void> {
+    try {
+      await AsyncStorage.setItem('passwords', JSON.stringify(passwords));
+    } catch (error) {
+      console.error('Failed to save passwords to AsyncStorage:', error);
+    }
+  }
+
   async addPassword(password: Omit<Password, 'id' | 'createdAt'>): Promise<number> {
+    if (this.isWeb) {
+      const passwords = await this.getWebPasswords();
+      const newId = passwords.length > 0 ? Math.max(...passwords.map(p => p.id)) + 1 : 1;
+      const newPassword: Password = {
+        ...password,
+        id: newId,
+        createdAt: new Date().toISOString()
+      };
+      await this.saveWebPasswords([...passwords, newPassword]);
+      return newId;
+    }
+    
     const db = await this.ensureDb();
+    if (!db) throw new Error('Database not available');
+    
     const createdAt = new Date().toISOString();
 
     try {
@@ -76,7 +122,12 @@ class DatabaseService {
   }
 
   async getAllPasswords(): Promise<Password[]> {
+    if (this.isWeb) {
+      return this.getWebPasswords();
+    }
+    
     const db = await this.ensureDb();
+    if (!db) throw new Error('Database not available');
     
     try {
       return await db.getAllAsync<Password>(
@@ -89,7 +140,16 @@ class DatabaseService {
   }
 
   async searchPasswords(query: string): Promise<Password[]> {
+    if (this.isWeb) {
+      const passwords = await this.getWebPasswords();
+      const searchQuery = query.toLowerCase();
+      return passwords.filter(password => 
+        password.name.toLowerCase().includes(searchQuery)
+      );
+    }
+    
     const db = await this.ensureDb();
+    if (!db) throw new Error('Database not available');
     
     try {
       return await db.getAllAsync<Password>(
@@ -103,7 +163,15 @@ class DatabaseService {
   }
 
   async deletePassword(id: number): Promise<void> {
+    if (this.isWeb) {
+      const passwords = await this.getWebPasswords();
+      const filteredPasswords = passwords.filter(p => p.id !== id);
+      await this.saveWebPasswords(filteredPasswords);
+      return;
+    }
+    
     const db = await this.ensureDb();
+    if (!db) throw new Error('Database not available');
     
     try {
       await db.runAsync(
@@ -117,7 +185,17 @@ class DatabaseService {
   }
 
   async updatePassword(id: number, password: Omit<Password, 'id' | 'createdAt'>): Promise<void> {
+    if (this.isWeb) {
+      const passwords = await this.getWebPasswords();
+      const updatedPasswords = passwords.map(p => 
+        p.id === id ? { ...p, ...password } : p
+      );
+      await this.saveWebPasswords(updatedPasswords);
+      return;
+    }
+    
     const db = await this.ensureDb();
+    if (!db) throw new Error('Database not available');
     
     try {
       await db.runAsync(
