@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { usePasswordContext } from '../contexts/PasswordContext';
-import { BlurView } from '@react-native-community/blur';
+import { BlurView } from 'expo-blur';
 
 export function SearchBar() {
   const { searchPasswords, clearSearch } = usePasswordContext();
